@@ -15,77 +15,28 @@
             --gold-gradient: linear-gradient(90deg, #d4af37, #f1d592, #d4af37);
             --garena-red: #e51e1e;
         }
-
-        body { 
-            margin: 0; padding: 0; 
-            font-family: 'Inter', sans-serif; 
-            background-color: #f7fafc; 
-            display: flex; justify-content: center; 
-        }
-
-        .mobile-container { 
-            width: 100%; 
-            min-height: 100vh; background-color: #ffffff;
-            display: flex; flex-direction: column; 
-        }
-
-        header { 
-            width: 100%; height: 70px; background-color: var(--bg-light); 
-            border-bottom: 1px solid var(--border-gray); display: flex; 
-            align-items: center; justify-content: space-between; 
-            padding: 0 4%; box-sizing: border-box; position: sticky; 
-            top: 0; z-index: 1000;
-        }
-
+        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background-color: #f7fafc; display: flex; justify-content: center; }
+        .mobile-container { width: 100%; min-height: 100vh; background-color: #ffffff; display: flex; flex-direction: column; }
+        header { width: 100%; height: 70px; background-color: var(--bg-light); border-bottom: 1px solid var(--border-gray); display: flex; align-items: center; justify-content: space-between; padding: 0 4%; box-sizing: border-box; position: sticky; top: 0; z-index: 1000; }
         .brand-section { display: flex; align-items: center; }
         .logo-img { height: 32px; width: auto; } 
         .v-line { width: 1px; height: 20px; background-color: #cbd5e0; margin: 0 10px; }
         .title-box span { font-size: 11px; font-weight: 800; color: var(--text-dark); display: block; }
-
-        .selector-wrapper { 
-            display: flex; align-items: center; background: #ffffff; border: 1px solid #cbd5e0; 
-            border-radius: 6px; padding: 0 8px; min-width: 130px; height: 36px; 
-            position: relative;
-        }
-
+        .selector-wrapper { display: flex; align-items: center; background: #ffffff; border: 1px solid #cbd5e0; border-radius: 6px; padding: 0 8px; min-width: 130px; height: 36px; position: relative; }
         .display-text { font-size: 11px; font-weight: 700; color: #4a5568; flex-grow: 1; text-align: center; }
         .hidden-selects { position: absolute; top:0; left:0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
-
-        .golden-bar {
-            width: 100%; height: 30px; background: var(--gold-gradient);
-            overflow: hidden; display: flex; align-items: center;
-        }
-
+        .golden-bar { width: 100%; height: 30px; background: var(--gold-gradient); overflow: hidden; display: flex; align-items: center; }
         .marquee-content { display: flex; white-space: nowrap; animation: marquee-scroll-rtl 25s linear infinite; }
         @keyframes marquee-scroll-rtl { 0% { transform: translateX(0); } 100% { transform: translateX(50%); } }
         .marquee-text { font-size: 13px; font-weight: 800; color: #4a3701; padding: 0 60px; }
-
         .login-section { padding: 50px 10%; } 
-        
-        .login-card {
-            background: #ffffff; border-radius: 16px; padding: 40px 25px;
-            border: 1px solid #e2e8f0; max-width: 450px; margin: 0 auto;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        .google-btn {
-            display: flex; align-items: center; justify-content: center;
-            background-color: #ffffff; color: #1f1f1f;
-            border: 1.5px solid #dadce0; border-radius: 8px;
-            padding: 14px 20px; font-size: 16px; font-weight: 600;
-            cursor: pointer; width: 100%; margin: 20px 0 0 0;
-            transition: all 0.2s; gap: 12px;
-        }
+        .login-card { background: #ffffff; border-radius: 16px; padding: 40px 25px; border: 1px solid #e2e8f0; max-width: 450px; margin: 0 auto; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); text-align: center; }
+        .google-btn { display: flex; align-items: center; justify-content: center; background-color: #ffffff; color: #1f1f1f; border: 1.5px solid #dadce0; border-radius: 8px; padding: 14px 20px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; margin: 20px 0 0 0; transition: all 0.2s; gap: 12px; }
         .google-btn:hover { background-color: #f8f9fa; border-color: #d2e3fc; }
         .google-icon { width: 20px; height: 20px; }
-
         .locked-interaction { pointer-events: none; opacity: 0.6; }
         .flag-icon { width: 20px; height: 14px; margin-left: 6px; }
-
-        @media (max-width: 480px) {
-            .login-section { padding: 40px 15px; }
-        }
+        @media (max-width: 480px) { .login-section { padding: 40px 15px; } }
     </style>
 </head>
 <body>
@@ -106,8 +57,8 @@
                     <span id="label-reg">MENA</span> | <span id="label-lng">العربية</span>
                 </div>
                 <div class="hidden-selects">
-                    <select id="region-select" onchange="handleRegion(this)"></select>
-                    <select id="lang-select" onchange="handleLang(this)">
+                    <select id="region-select"></select>
+                    <select id="lang-select">
                         <option value="ar">العربية</option>
                         <option value="en">EN</option>
                     </select>
@@ -136,6 +87,7 @@
         import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
+        // إعداداتك المحدثة
         const firebaseConfig = {
             apiKey: "AIzaSyCP0N4c2WP2RuObIfXf9y2Rx8ZWHrffh7Q",
             authDomain: "serviocmm-aa290.firebaseapp.com",
@@ -153,10 +105,11 @@
         const loginBtn = document.getElementById('btn-google');
         const btnText = document.getElementById('text-platform-btn');
 
-        loginBtn.onclick = async () => {
+        // ربط الزر عن طريق JavaScript داخل الموديول لضمان العمل
+        loginBtn.addEventListener('click', async () => {
             try {
                 loginBtn.classList.add('locked-interaction');
-                btnText.innerText = "جاري التحويل...";
+                btnText.innerText = "جاري الاتصال...";
 
                 const result = await signInWithPopup(auth, provider);
                 const user = result.user;
@@ -174,21 +127,18 @@
                     });
                 }
 
-                alert("تم تسجيل الدخول بنجاح: " + user.displayName);
+                alert("تم تسجيل الدخول: " + user.displayName);
                 window.location.reload(); 
 
             } catch (error) {
-                console.error("Firebase Error:", error);
-                alert("خطأ في الاتصال بقاعدة البيانات.");
+                console.error("Firebase Error Code:", error.code);
+                alert("حدث خطأ: " + error.message);
                 loginBtn.classList.remove('locked-interaction');
                 btnText.innerText = "تسجيل الدخول عبر Gmail";
             }
-        };
+        });
 
-        // UI Functions
-        window.handleLang = (el) => { localStorage.setItem('pref_lang', el.value); updateUI(); };
-        window.handleRegion = (el) => { localStorage.setItem('pref_reg_idx', el.selectedIndex); updateUI(); };
-
+        // دوال الواجهة
         const shopData = {
             regions: { ar: ["الشرق الأوسط", "الجزائر", "مصر", "المغرب", "السعودية", "تونس", "الإمارات"], en: ["MENA", "Algeria", "Egypt", "Morocco", "Saudi Arabia", "Tunisia", "UAE"] },
             keys: ["mena", "algeria", "egypt", "morocco", "saudi", "tunisia", "uae"],
@@ -226,7 +176,10 @@
             display.innerHTML = (key === 'mena') ? flags[key] : `<img src="${flags[key]}" class="flag-icon">`;
         }
 
-        window.onload = updateUI;
+        document.getElementById('lang-select').onchange = (e) => { localStorage.setItem('pref_lang', e.target.value); updateUI(); };
+        document.getElementById('region-select').onchange = (e) => { localStorage.setItem('pref_reg_idx', e.target.selectedIndex); updateUI(); };
+
+        updateUI();
     </script>
 </body>
 </html>
