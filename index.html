@@ -1,20 +1,141 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" class="notranslate" translate="no"> 
 <head>
     <meta charset="UTF-8">
-    <title>Wallet System</title>
-    </head>
-<body>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="google" content="notranslate">
+    <title>Garena - Official Top Up Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { 
+            --bg-light: #f8fbff; 
+            --border-gray: #e2e8f0; 
+            --text-dark: #1a202c;
+            --gold-gradient: linear-gradient(90deg, #d4af37, #f1d592, #d4af37);
+            --garena-red: #e51e1e;
+        }
 
-    <button id="login-google">تسجيل الدخول عبر Google</button>
+        body { 
+            margin: 0; padding: 0; 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f7fafc; 
+            display: flex; justify-content: center; 
+        }
+
+        .mobile-container { 
+            width: 100%; 
+            min-height: 100vh; background-color: #ffffff;
+            display: flex; flex-direction: column; 
+        }
+
+        header { 
+            width: 100%; height: 70px; background-color: var(--bg-light); 
+            border-bottom: 1px solid var(--border-gray); display: flex; 
+            align-items: center; justify-content: space-between; 
+            padding: 0 4%; box-sizing: border-box; position: sticky; 
+            top: 0; z-index: 1000;
+        }
+
+        .brand-section { display: flex; align-items: center; }
+        .logo-img { height: 32px; width: auto; } 
+        .v-line { width: 1px; height: 20px; background-color: #cbd5e0; margin: 0 10px; }
+        .title-box span { font-size: 11px; font-weight: 800; color: var(--text-dark); display: block; }
+
+        .selector-wrapper { 
+            display: flex; align-items: center; background: #ffffff; border: 1px solid #cbd5e0; 
+            border-radius: 6px; padding: 0 8px; min-width: 130px; height: 36px; 
+            position: relative;
+        }
+
+        .display-text { font-size: 11px; font-weight: 700; color: #4a5568; flex-grow: 1; text-align: center; }
+        .hidden-selects { position: absolute; top:0; left:0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+
+        .golden-bar {
+            width: 100%; height: 30px; background: var(--gold-gradient);
+            overflow: hidden; display: flex; align-items: center;
+        }
+
+        .marquee-content { display: flex; white-space: nowrap; animation: marquee-scroll-rtl 25s linear infinite; }
+        @keyframes marquee-scroll-rtl { 0% { transform: translateX(0); } 100% { transform: translateX(50%); } }
+        .marquee-text { font-size: 13px; font-weight: 800; color: #4a3701; padding: 0 60px; }
+
+        .login-section { padding: 50px 10%; } 
+        
+        .login-card {
+            background: #ffffff; border-radius: 16px; padding: 40px 25px;
+            border: 1px solid #e2e8f0; max-width: 450px; margin: 0 auto;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .google-btn {
+            display: flex; align-items: center; justify-content: center;
+            background-color: #ffffff; color: #1f1f1f;
+            border: 1.5px solid #dadce0; border-radius: 8px;
+            padding: 14px 20px; font-size: 16px; font-weight: 600;
+            cursor: pointer; width: 100%; margin: 20px 0 0 0;
+            transition: all 0.2s; gap: 12px;
+        }
+        .google-btn:hover { background-color: #f8f9fa; border-color: #d2e3fc; }
+        .google-icon { width: 20px; height: 20px; }
+
+        .locked-interaction { pointer-events: none; opacity: 0.6; }
+        .flag-icon { width: 20px; height: 14px; margin-left: 6px; }
+
+        @media (max-width: 480px) {
+            .login-section { padding: 40px 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <header>
+            <div class="brand-section">
+                <img src="https://i.postimg.cc/KvMWmkZw/servio.png" alt="Garena" class="logo-img">
+                <div class="v-line"></div>
+                <div class="title-box">
+                    <span id="nav-t1">مركز الشحن</span>
+                    <span id="nav-t2">الرسمي</span>
+                </div>
+            </div>
+
+            <div class="selector-wrapper">
+                <div id="flag-display" style="display: flex; align-items: center;"></div>
+                <div class="display-text">
+                    <span id="label-reg">MENA</span> | <span id="label-lng">العربية</span>
+                </div>
+                <div class="hidden-selects">
+                    <select id="region-select" onchange="handleRegion(this)"></select>
+                    <select id="lang-select" onchange="handleLang(this)">
+                        <option value="ar">العربية</option>
+                        <option value="en">EN</option>
+                    </select>
+                </div>
+            </div>
+        </header>
+
+        <div class="golden-bar">
+            <div id="marquee-box" class="marquee-content"></div>
+        </div>
+
+        <div class="login-section">
+            <div class="login-card">
+                <h2 style="font-size: 18px; color: #333; margin: 0;" id="login-head">تسجيل الدخول للمتابعة</h2>
+                
+                <button class="google-btn" id="btn-google">
+                    <img class="google-icon" src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google">
+                    <span id="text-platform-btn">تسجيل الدخول عبر Gmail</span>
+                </button>
+            </div>
+        </div>
+    </div>
 
     <script type="module">
-        // 1. استيراد المكتبات اللازمة
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // 2. إعدادات Firebase الخاصة بك
         const firebaseConfig = {
             apiKey: "AIzaSyCP0N4c2WP2RuObIfXf9y2Rx8ZWHrffh7Q",
             authDomain: "serviocmm-aa290.firebaseapp.com",
@@ -24,25 +145,26 @@
             appId: "1:269781026726:web:21b94084ad631a70feb167"
         };
 
-        // 3. تهيئة الخدمات
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
 
-        // 4. وظيفة تسجيل الدخول التلقائي
-        const loginBtn = document.getElementById('login-google');
-        
+        const loginBtn = document.getElementById('btn-google');
+        const btnText = document.getElementById('text-platform-btn');
+
         loginBtn.onclick = async () => {
             try {
+                // تأثير بصري للتحميل
+                loginBtn.classList.add('locked-interaction');
+                btnText.innerText = (localStorage.getItem('pref_lang') === 'en') ? "Connecting..." : "جاري التحويل...";
+
                 const result = await signInWithPopup(auth, provider);
                 const user = result.user;
 
-                // مرجع لمستند المستخدم باستخدام UID الخاص به
                 const userRef = doc(db, "users", user.uid);
                 const userSnap = await getDoc(userRef);
 
-                // إذا كان المستخدم لا يملك ملفاً، أنشئه له تلقائياً
                 if (!userSnap.exists()) {
                     await setDoc(userRef, {
                         NAME: user.displayName || "مستخدم جديد",
@@ -51,17 +173,61 @@
                         email: user.email,
                         createdAt: new Date()
                     });
-                    console.log("تم إنشاء المحفظة تلقائياً!");
                 }
 
-                alert("تم تسجيل الدخول بنجاح يا " + user.displayName);
+                alert("تم تسجيل الدخول بنجاح: " + user.displayName);
                 window.location.reload(); 
 
             } catch (error) {
-                console.error("خطأ في العملية:", error);
-                alert("فشل تسجيل الدخول، تأكد من إعدادات القواعد (Rules)");
+                console.error("Firebase Error:", error);
+                alert("فشل تسجيل الدخول. تأكد من إعدادات الـ Google Login في Firebase Console.");
+                loginBtn.classList.remove('locked-interaction');
+                btnText.innerText = (localStorage.getItem('pref_lang') === 'en') ? "Login with Gmail" : "تسجيل الدخول عبر Gmail";
             }
         };
+
+        // وظائف الواجهة (تغيير اللغة والمنطقة)
+        window.handleLang = (el) => { localStorage.setItem('pref_lang', el.value); updateUI(); };
+        window.handleRegion = (el) => { localStorage.setItem('pref_reg_idx', el.selectedIndex); updateUI(); };
+
+        const shopData = {
+            regions: { ar: ["الشرق الأوسط", "الجزائر", "مصر", "المغرب", "السعودية", "تونس", "الإمارات"], en: ["MENA", "Algeria", "Egypt", "Morocco", "Saudi Arabia", "Tunisia", "UAE"] },
+            keys: ["mena", "algeria", "egypt", "morocco", "saudi", "tunisia", "uae"],
+            nav: { 
+                ar: { t1: "مركز الشحن", t2: "الرسمي", marquee: "مركز الشحن الرسمي لـ SERVIO - سجل الآن للحصول على مكافآت", head: "تسجيل الدخول للمتابعة", platformBtn: "تسجيل الدخول عبر Gmail" }, 
+                en: { t1: "Top Up", t2: "Center", marquee: "OFFICIAL TOP UP CENTER - LOGIN TO GET REWARDS", head: "Login to continue", platformBtn: "Login with Gmail" } 
+            }
+        };
+
+        const flags = {
+            mena: `<svg style="width:18px; fill:#718096; margin-left:6px;" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>`,
+            algeria: `https://flagcdn.com/dz.svg`, egypt: `https://flagcdn.com/eg.svg`, morocco: `https://flagcdn.com/ma.svg`, saudi: `https://flagcdn.com/sa.svg`, tunisia: `https://flagcdn.com/tn.svg`, uae: `https://flagcdn.com/ae.svg`
+        };
+
+        function updateUI() {
+            const lang = localStorage.getItem('pref_lang') || 'ar';
+            const regIdx = parseInt(localStorage.getItem('pref_reg_idx')) || 0;
+            const data = shopData.nav[lang];
+
+            document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+            document.getElementById('nav-t1').innerText = data.t1;
+            document.getElementById('nav-t2').innerText = data.t2;
+            document.getElementById('marquee-box').innerHTML = Array(5).fill(`<span class="marquee-text">${data.marquee}</span>`).join('');
+            document.getElementById('login-head').innerText = data.head;
+            document.getElementById('text-platform-btn').innerText = data.platformBtn;
+
+            const regSel = document.getElementById('region-select');
+            regSel.innerHTML = shopData.regions[lang].map((name, i) => `<option value="${i}">${name}</option>`).join('');
+            regSel.selectedIndex = regIdx;
+            document.getElementById('label-reg').innerText = shopData.regions[lang][regIdx];
+            document.getElementById('label-lng').innerText = (lang === 'ar' ? 'العربية' : 'EN');
+
+            const display = document.getElementById('flag-display');
+            const key = shopData.keys[regIdx];
+            display.innerHTML = (key === 'mena') ? flags[key] : `<img src="${flags[key]}" class="flag-icon">`;
+        }
+
+        window.onload = updateUI;
     </script>
 </body>
 </html>
